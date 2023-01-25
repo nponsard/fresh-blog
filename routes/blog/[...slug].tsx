@@ -1,8 +1,7 @@
 import { Handlers, PageProps } from '$fresh/server.ts';
 import { Head } from '$fresh/runtime.ts';
 import { gfm } from '../../utils/markdown.ts';
-import {getDatabase} from '../../backend/mongo.ts';
-
+import { getDatabase } from '../../backend/mongo.ts';
 
 interface Data {
   markdown: string;
@@ -10,16 +9,22 @@ interface Data {
 }
 
 export const handler: Handlers<Data> = {
-  GET(req, ctx) {
+  async GET(req, ctx) {
     const slug = ctx.params.slug;
 
-    console.log(getDatabase())
+    const database = getDatabase();
 
-    const markdown = `
-# Hello World
+    const posts = database.collection('blog_posts');
 
-test
-    `;
+    const post = await posts.findOne({ slug: slug });
+    console.log(post);
+
+    if (!post) {
+      return ctx.renderNotFound();
+    }
+
+
+    const markdown = post.content;
     const resp = ctx.render({ slug, markdown });
 
     return resp;
