@@ -1,6 +1,8 @@
 import { Handlers, PageProps } from '$fresh/server.ts';
 import { Head } from '$fresh/runtime.ts';
 import { gfm } from '../../utils/markdown.ts';
+import {getDatabase} from '../../backend/mongo.ts';
+
 
 interface Data {
   markdown: string;
@@ -10,6 +12,9 @@ interface Data {
 export const handler: Handlers<Data> = {
   GET(req, ctx) {
     const slug = ctx.params.slug;
+
+    console.log(getDatabase())
+
     const markdown = `
 # Hello World
 
@@ -30,7 +35,7 @@ export default function BlogPost(props: PageProps<Data>) {
       <Head>
         <link rel="stylesheet" href={`/gfm.css?build=${__FRSH_BUILD_ID}`} />
       </Head>
-      <div class="p-4 mx-auto max-w-screen-md m">
+      <div class="p-4 mx-auto max-w-screen-md">
         <h1>{slug}</h1>
         <div
           class="mt-6 markdown-body"
