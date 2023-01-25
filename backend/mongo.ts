@@ -1,11 +1,5 @@
-import { Bson, MongoClient } from '$mongo/mod.ts';
-import {
-  MONGO_DATABASE,
-  MONGO_PASSWORD,
-  MONGO_URL,
-  MONGO_PORT,
-  MONGO_TLS,
-} from '../env.ts';
+import {  MongoClient } from '$mongo/mod.ts';
+import { MONGO_DATABASE, MONGO_URL } from '../env.ts';
 
 export const NotConnectedError = new Error('Not connected to MongoDB');
 
@@ -19,7 +13,7 @@ export function getDatabase() {
     throw NotConnectedError;
   }
 
-  return client.database(MONGO_DATABASE );
+  return client.database(MONGO_DATABASE);
 }
 
 while (!connected) {
